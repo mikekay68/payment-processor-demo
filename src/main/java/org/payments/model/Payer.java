@@ -1,4 +1,8 @@
 package org.payments.model;
 
-public record Payer(String name, String org) {
+import jakarta.annotation.Nullable;
+import lombok.Builder;
+
+@Builder
+public record Payer(String name, @Nullable String org) {
 }

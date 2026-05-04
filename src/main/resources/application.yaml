@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    # Use 'tc' in the URL to trigger Testcontainers auto-configuration
+    url: jdbc:tc:postgresql:16:///test_db
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: test_user
+    password: test_password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: test-group
+      auto-offset-reset: earliest # Ensures messages sent before the listener starts are still read
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: mappings
